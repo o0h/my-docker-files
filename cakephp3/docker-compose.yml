@@ -2,6 +2,7 @@ version: '3'
 services:
   web:
     container_name: my-app
+    image: mycakephp_web
     build: ./docker/web
     volumes:
       - ./cake/:/app:cached
@@ -18,7 +19,7 @@ services:
     command: "bin/cake server -H 0.0.0.0 -p 8101"
   phpunit:
     container_name: my-app-phpunit
-    build: ./docker/web
+    image : mycakephp_web:latest
     volumes:
       - ./cake/:/app:cached
       - ./docker/web/etc_php_conf_xdebug.ini:/etc/php.d/xdebug.ini:cached
