@@ -30,7 +30,7 @@ services:
       DATABASE_URL: mysql://my_app:secret@my-app-db/my_app
       PHP_IDE_CONFIG: serverName=PHP_MY_APP
   db:
-    image: mysql
+    image: mysql:5
     container_name: my-app-db
     environment:
       MYSQL_DATABASE: my_app
