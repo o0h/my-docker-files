@@ -1,0 +1,34 @@
+version: '3'
+services:
+  php:
+    container_name: my-app-php
+    volumes:
+      - ../app:/var/www/html
+      - ./volumes/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    build:
+      context: ../
+      dockerfile: ./docker_files/Dockerfile_php
+
+    depends_on:
+      - database
+  nginx:
+    image: nginx:alpine
+    container_name: my-app-nginx
+    ports:
+      - "9100:80"
+    volumes:
+      - ./volumes/etc/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+  database:
+    image: mysql:5
+    container_name: my-app-mysql
+    environment:
+      MYSQL_DATABASE: my_app
+      MYSQL_USER: my_app
+      MYSQL_PASSWORD: secret
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+    volumes:
+      - ./database/data:/var/lib/mysql:cached
+      - ./database/init:/docker-entrypoint-initdb.d
+

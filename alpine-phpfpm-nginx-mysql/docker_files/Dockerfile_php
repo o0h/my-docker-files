@@ -1,0 +1,16 @@
+FROM php:7.3-fpm-alpine
+RUN apk add bash
+RUN NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) && \
+          docker-php-ext-install -j${NPROC} \
+            pdo_mysql \
+            mbstring && \
+          apk add \
+            autoconf \
+            build-base && \
+          pecl install xdebug && \
+          docker-php-ext-enable xdebug && \
+          rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer && \
+            apk --no-cache add git zip
+
+WORKDIR /var/www/html
